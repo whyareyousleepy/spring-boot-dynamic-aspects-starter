@@ -1,24 +1,23 @@
 package com.nuzhd.validation;
 
+import com.nuzhd.domain.DesignatorType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Locale;
 
-import static com.nuzhd.messages.DynamicAspectsMessageKeys.CLASS_NOT_FOUND_KEY;
-import static com.nuzhd.messages.DynamicAspectsMessageKeys.INVALID_EXECUTION_EXPRESSION_KEY;
-import static com.nuzhd.messages.DynamicAspectsMessageKeys.METHOD_NOT_FOUND_KEY;
-import static com.nuzhd.messages.DynamicAspectsMessageKeys.WRONG_ACCESS_MODIFIER_KEY;
-import static com.nuzhd.messages.DynamicAspectsMessageKeys.WRONG_RETURN_TYPE_KEY;
-import static com.nuzhd.utils.PointcutExpressionUtils.extractClassName;
-import static com.nuzhd.utils.PointcutExpressionUtils.extractMethodName;
 import static com.nuzhd.domain.DesignatorType.EXECUTION;
+import static com.nuzhd.utils.DynamicAspectsUtils.extractClassName;
+import static com.nuzhd.utils.DynamicAspectsUtils.extractMethodName;
+import static ru.vtb.conp.commons.dynamic.aspects.starter.messages.DynamicAspectsMessageKeys.CLASS_NOT_FOUND_KEY;
+import static ru.vtb.conp.commons.dynamic.aspects.starter.messages.DynamicAspectsMessageKeys.INVALID_EXECUTION_EXPRESSION_KEY;
+import static ru.vtb.conp.commons.dynamic.aspects.starter.messages.DynamicAspectsMessageKeys.METHOD_NOT_FOUND_KEY;
+import static ru.vtb.conp.commons.dynamic.aspects.starter.messages.DynamicAspectsMessageKeys.WRONG_ACCESS_MODIFIER_KEY;
+import static ru.vtb.conp.commons.dynamic.aspects.starter.messages.DynamicAspectsMessageKeys.WRONG_RETURN_TYPE_KEY;
 
-@Component
 public class ExecutionPointcutValidationService extends PointcutValidationService {
 
     private final MessageSource messageSource;
@@ -29,13 +28,20 @@ public class ExecutionPointcutValidationService extends PointcutValidationServic
     }
 
     @Override
+    public DesignatorType getDesignatorType() {
+        return EXECUTION;
+    }
+
+    @Override
     public void validateExpression(String pointcutExpression) throws IllegalArgumentException {
         // Разделение на модификаторы доступа, тип возвращаемого значения, имя класса и метода
         String[] parts = pointcutExpression.trim().split("\\s+");
 
         if (parts.length < 2) {
-            throw new IllegalArgumentException(
-                    messageSource.getMessage(INVALID_EXECUTION_EXPRESSION_KEY, null, Locale.ROOT));
+            throw new IllegalArgumentException(messageSource.getMessage(INVALID_EXECUTION_EXPRESSION_KEY,
+                                                                        null,
+                                                                        Locale.ROOT)
+            );
         }
 
         String rowClassName, modifiers, returnType;
@@ -71,25 +77,38 @@ public class ExecutionPointcutValidationService extends PointcutValidationServic
                                                )
                                                .findAny()
                                                .orElseThrow(() -> new IllegalArgumentException(
-                                                       messageSource.getMessage(METHOD_NOT_FOUND_KEY,
-                                                                                new Object[] {methodName,
-                                                                                        className}, Locale.ROOT)));
+                                                                    messageSource.getMessage(
+                                                                            METHOD_NOT_FOUND_KEY,
+                                                                            new Object[] {methodName, className},
+                                                                            Locale.ROOT
+                                                                    )
+                                                            )
+                                               );
                     if (!checkModifiers(modifiers, existingMethod)) {
                         throw new IllegalArgumentException(
                                 messageSource.getMessage(WRONG_ACCESS_MODIFIER_KEY,
-                                                         new Object[] {existingMethod.getName()}, Locale.ROOT)
+                                                         new Object[] {existingMethod.getName()},
+                                                         Locale.ROOT
+                                )
                         );
                     }
                     if (!checkReturnType(returnType, existingMethod)) {
                         throw new IllegalArgumentException(
-                                messageSource.getMessage(WRONG_RETURN_TYPE_KEY, new Object[] {existingMethod.getName(),
-                                        existingMethod.getReturnType().getSimpleName()}, Locale.ROOT)
+                                messageSource.getMessage(WRONG_RETURN_TYPE_KEY,
+                                                         new Object[] {existingMethod.getName(), existingMethod.getReturnType().getSimpleName()},
+                                                         Locale.ROOT
+                                )
                         );
                     }
                 }
             } catch (ClassNotFoundException e) {
                 throw new IllegalArgumentException(
-                        messageSource.getMessage(CLASS_NOT_FOUND_KEY, new Object[] {className}, Locale.ROOT));
+                        messageSource.getMessage(
+                                CLASS_NOT_FOUND_KEY,
+                                new Object[] {className},
+                                Locale.ROOT
+                        )
+                );
             }
         }
     }

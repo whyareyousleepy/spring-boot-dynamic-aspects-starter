@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
-import static com.nuzhd.messages.DynamicAspectsMessageKeys.CREATE_ASPECTS_START_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.vtb.conp.commons.dynamic.aspects.starter.messages.DynamicAspectsMessageKeys.CREATE_ASPECTS_START_KEY;
 
 class DynamicAspectsMessageSourceTest {
 

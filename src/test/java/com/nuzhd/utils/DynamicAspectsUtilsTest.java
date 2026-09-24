@@ -19,14 +19,14 @@ import static com.nuzhd.domain.DesignatorType.THIS;
 import static com.nuzhd.domain.DesignatorType.WITHIN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PointcutExpressionUtilsTest {
+class DynamicAspectsUtilsTest {
 
     @ParameterizedTest
     @MethodSource("provideExtractExpressions")
     void extractExpression_DifferentExpressions(DesignatorType designator,
                                                 String rawExpr,
                                                 String extractedExpr) {
-        assertEquals(extractedExpr, PointcutExpressionUtils.extractExpression(rawExpr, designator));
+        assertEquals(extractedExpr, DynamicAspectsUtils.extractExpression(rawExpr, designator));
     }
 
     private static Stream<Arguments> provideExtractExpressions() {
@@ -47,5 +47,4 @@ class PointcutExpressionUtilsTest {
                 Arguments.of(BEAN, "bean(SomeClass)", "SomeClass")
         );
     }
-
 }

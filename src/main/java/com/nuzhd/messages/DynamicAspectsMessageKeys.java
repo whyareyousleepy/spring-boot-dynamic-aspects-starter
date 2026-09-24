@@ -1,4 +1,4 @@
-package com.nuzhd.messages;
+package ru.vtb.conp.commons.dynamic.aspects.starter.messages;
 
 public final class DynamicAspectsMessageKeys {
 
@@ -16,6 +16,7 @@ public final class DynamicAspectsMessageKeys {
     public static final String INVALID_ARGS_EXPRESSION_KEY = "dynamic.aspects.error.args.invalid_expression";
     public static final String WRONG_ACCESS_MODIFIER_KEY = "dynamic.aspects.error.execution.wrong_access_modifier";
     public static final String WRONG_RETURN_TYPE_KEY = "dynamic.aspects.error.execution.wrong_return_type";
+    public static final String VALIDATOR_NOT_FOUND = "dynamic.aspects.error.validator.not_found";
 
     private DynamicAspectsMessageKeys() {
     }

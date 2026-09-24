@@ -2,7 +2,9 @@ package com.nuzhd.domain;
 
 import java.util.Arrays;
 
-/// [Supported Designators](https://docs.spring.io/spring-framework/reference/core/aop/ataspectj/pointcuts.html#aop-pointcuts-designators)
+/**
+ * @see <a href="https://docs.spring.io/spring-framework/reference/core/aop/ataspectj/pointcuts.html#aop-pointcuts-designators">Supported Designators</a>
+ */
 public enum DesignatorType {
 
     EXECUTION("execution"),
